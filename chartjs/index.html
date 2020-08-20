@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MEMBUAT GRAFIK DARI DATABASE MYSQL DENGAN PHP DAN CHART.JS - www.malasngoding.com</title>
+	<script type="text/javascript" src="chartjs/Chart.js"></script>
+</head>
+<body>
+	<style type="text/css">
+	body{
+		font-family: roboto;
+	}
+ 
+	table{
+		margin: 0px auto;
+	}
+	</style>
+ 
+ 
+	<center>
+		<h2>MEMBUAT GRAFIK DARI DATABASE MYSQL DENGAN PHP DAN CHART.JS<br/>- www.malasngoding.com -</h2>
+	</center>
+ 
+ 
+	<?php 
+	include 'koneksi.php';
+	?>
+ 
+	<div style="width: 800px;margin: 0px auto;">
+		<canvas id="myChart"></canvas>
+	</div>
+ 
+	<br/>
+	<br/>
+ 
+	<table border="1">
+		<thead>
+			<tr>
+				<th>No</th>
+				<th>Nama Mahasiswa</th>
+				<th>NIM</th>
+				<th>Fakultas</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php 
+			$no = 1;
+			$data = mysqli_query($koneksi,"select * from cart");
+			while($d=mysqli_fetch_array($data)){
+				?>
+				<tr>
+					<td><?php echo $no++; ?></td>
+					<td><?php echo $d['id_cart']; ?></td>
+					<td><?php echo $d['nama']; ?></td>
+					<td><?php echo $d['jenis']; ?></td>
+				</tr>
+				<?php 
+			}
+			?>
+		</tbody>
+	</table>
+ 
+ 
+	<script>
+		var ctx = document.getElementById("myChart").getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ["Kaos", "Kemeja", "Boxer", "Celana Pendek", "Jaket"],
+				datasets: [{
+					label: '',
+					data: [
+					<?php
+					  $jumlah_kaos = mysqli_query($koneksi,"select * from cart where jenis='Kaos'");
+					  echo mysqli_num_rows($jumlah_kaos);
+					  ?>,
+					  <?php
+					  $jumlah_kemeja = mysqli_query($koneksi,"select * from cart where jenis='Kemeja'");
+					  echo mysqli_num_rows($jumlah_kemeja);
+					  ?>,
+					  <?php
+					  $jumlah_boxer = mysqli_query($koneksi,"select * from cart where jenis='Boxer'");
+					  echo mysqli_num_rows($jumlah_boxer);
+					  ?>,
+					  <?php
+					  $jumlah_celanapendek = mysqli_query($koneksi,"select * from cart where jenis='Celana Pendek'");
+					  echo mysqli_num_rows($jumlah_celanapendek);
+					  ?>,
+					  <?php
+					  $jumlah_jaket = mysqli_query($koneksi,"select * from cart where jenis='Jaket'");
+					  echo mysqli_num_rows($jumlah_jaket);
+					  ?>
+					],
+					backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)'
+					],
+					borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+				}
+			}
+		});
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
